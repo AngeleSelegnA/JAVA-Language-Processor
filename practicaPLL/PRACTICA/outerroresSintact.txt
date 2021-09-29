@@ -1,0 +1,20 @@
+(base) MacBook-Air-de-Ana-3:PRACTICA anabelen$ java -cp "cup.jar:." constructorast/Main  erroresSintac.txt
+ERROR SINTÁCTCO: fila 6 columna 6. Error en el identificador del enum 
+
+ERROR SINTÁCTCO: fila 10 columna 11. Error en la condición del if
+
+ERROR SINTÁCTCO: fila 18 columna 10. Error en la declaración/asignacion de la variable del for 
+
+ERROR SINTÁCTCO: fila 25 columna 20. Error en la condición del for 
+
+ERROR SINTÁCTCO: fila 33 columna 5. Error en el cuerpo del for 
+
+ERROR SINTÁCTCO: fila 41 columna 5. Error en el cuerpo del while
+
+ERROR SINTÁCTCO: fila 54 columna 10. Error en el identificador de la declaración 
+
+ERROR SINTÁCTCO: fila 55 columna 13. Error en la asignación 
+
+ERROR SINTÁCTCO: fila 61 columna 16. Error en las dimensiones del array 
+
+Demasiados errores sintacticos. Imposible recuperarse

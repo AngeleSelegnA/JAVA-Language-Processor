@@ -1,0 +1,17 @@
+fun void expOperaciones(){
+int x = 5 + 7 * 3 % 2 / 5;
+int y = 8 * 4 * 3;
+float z = x / y;
+
+}
+
+fun void expBooleanas(){
+int x = 5 ;
+int y = 8;
+
+bool a = x == y || x > 4*y;
+bool b = a || false;
+bool c = !a && !b;
+bool d = c && true;
+
+}

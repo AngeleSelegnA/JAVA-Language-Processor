@@ -1,0 +1,16 @@
+//error en algun campo del enum
+enum colores={rojo|azul|*-mal};
+
+//error en el identificador del procedimiento
+fun void if(){
+
+}
+
+//error en los parametros
+fun int funcionArgs(error){
+
+}
+
+fun void llamada(){
+    call *-mal;
+}

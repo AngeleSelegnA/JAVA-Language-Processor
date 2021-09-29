@@ -1,0 +1,71 @@
+struct casa{
+    bool vacia;
+    int numPersonas;
+};
+//Error en el identificador de un enum
+enum *mal={pepe|carla};
+
+//Recuperamos el error en la codición del if
+fun void pruebaIf(){
+    if (3*+5){
+    int x =7;
+    }
+}
+
+
+//Recuperamos el error en la declaracion con valor inicial de un bucle for
+fun void errorFor(){
+    for (mal; j < 7; j = j+1){
+        print(hola);
+    }
+}
+
+//Recuperamos el error en la condición del for
+fun void prFor(){
+    for(int i = 0; int x; ++i){
+        int x = i +3;
+    }
+}
+
+fun void cuerpoFor(){
+    for (int i=2; i<5;++i){
+        if
+    }
+}
+
+
+//Recuperamos el error en el cuerpo de while 
+fun void pruebaWhile(){
+    while(true){
+        ERRORcuERPO
+    }
+}
+
+//Recuperamos el error en la condición del while
+fun void prWhile(){
+    while(error){
+    int j = i + 2;
+    }
+}
+
+//Recuperamos el error en el identificador de una variable al declarar
+//Recuperamos el error en la asignacion
+fun void pruebaDec(){
+    int S*DVCN = 7;
+    asigmal=if;
+}
+
+//recuperamos el error en las dimensiones del array
+
+fun void pruebaArray(){
+    int tareas[-7 {0}];
+}
+//el siguiente error ya no se recupera hay demasiados e informa al usuario
+fun void norecupe(){
+    if(7*9-){
+        int j=5;
+    }
+}
+
+
+

@@ -1,0 +1,8 @@
+fun void main(){
+	if(2==2){
+		print(4);
+	}
+	else{
+		int a;
+	}
+}

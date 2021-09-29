@@ -1,0 +1,56 @@
+struct semana {
+    bool semanaAjetreada;
+    int lunes = 5;
+    int martes = 4;
+    int miercoles = 5;
+    int jueves = 3;
+    int viernes = 0;
+    int sabado = 1;
+    int domingo = 2;
+};
+
+fun int calculaNumTareas(int dia){
+    int sol = 0;
+    if(dia == 1){
+        sol = semana.lunes; 
+    }
+    elif(dia == 2){
+        sol = semana.martes; 
+    }
+    elif(dia == 3){
+        sol = semana.miercoles; 
+    }
+    elif(dia == 4){
+        sol = semana.jueves; 
+    }
+    elif(dia == 5){
+        sol = semana.viernes;
+    }
+    elif(dia == 6){
+        sol = semana.sabado;
+    }
+    else{
+        sol = semana.domingo;
+    }
+    return sol;
+
+}
+
+fun void agenda(){
+	int tareas[7 {0}];
+	int suma = 0;
+    bool ajetreado;
+	for(int i = 1; i <= 7; ++i){
+		tareas[i] = call calculaNumTareas(i);
+		suma = suma + tareas[i];
+	}
+	if(suma > 7){
+        ajetreado=true;
+    }
+    else{
+        ajetreado = false;
+    }
+    semana.semanaAjetreada = ajetreado;
+    print ajetreado;
+
+}

@@ -1,0 +1,90 @@
+Programa( 
+STRUCT( NOMBRE: Identificador: (casa), ELEMENTOS: Declaración (Tipo: BOOL Nombre: Identificador: (vacia)
+, Declaración (Tipo: INT Nombre: Identificador: (numPersonas)
+,  )
+
+ENUM (NOMBRE: Identificador: (ajo) VALORES: Identificador: (pepe), Identificador: (carla), 
+
+
+
+FUNCIÓN (TIPO: INT, NOMBRE: Identificador: (suma), PARÁMETROS: (Parametro( Tipo: INT, nombre: Identificador: (x) )
+, ), INSTRUCCIONES: (Declaración (Tipo: BOOL Nombre: Identificador: (ok) Valor inicial: true
+, Return( Identificador: (ok) )
+, ) )
+
+, 
+PROCEDIMIENTO void (NOMBRE: Identificador: (errorLlamada), PARÁMETROS: , INSTRUCCIONES: Declaración (Tipo: BOOL Nombre: Identificador: (otro)
+, LLamada a Función ( Nombre: Identificador: (suma), Argumentos: (Identificador: (otro),  ))
+,  )
+
+, 
+FUNCIÓN (TIPO: BOOL, NOMBRE: Identificador: (casas), PARÁMETROS: (Parametro( Tipo: BOOL, nombre: Identificador: (ale) )
+, ), INSTRUCCIONES: (Declaración (Tipo: INT Nombre: Identificador: (y) Valor inicial: entero: 3
+, Declaración (Tipo: INT Nombre: Identificador: (x) Valor inicial: call( nombre: Identificador: (suma), argumentos: Identificador: (y),  )
+
+, Print: Identificador: (x)
+, Declaración (Tipo: INT Nombre: Identificador: (hijos) Valor inicial: entero: 2
+, Declaración (Tipo: INT Nombre: Identificador: (hijas) Valor inicial: entero: 3
+, Declaración (Tipo: INT Nombre: Identificador: (padres)
+, Declaración (Tipo: INT Nombre: Identificador: (i) Valor inicial: entero: 5
+, Declaración (Tipo: BOOL Nombre: Identificador: (a) Valor inicial: menorIdentificador: (i),entero: 3)
+, For (Inicialización: Declaración (Tipo: INT Nombre: Identificador: (i) Valor inicial: entero: 5
+ Condición: menorIdentificador: (i),entero: 5) Paso: suma ++ (Identificador: (i)) Cuerpo: Declaración (Tipo: INT Nombre: Identificador: (j) Valor inicial: entero: 3
+, Instrucción If( condición If: Identificador: (casa)Instrucciones If: Declaración (Tipo: INT Nombre: Identificador: (j) Valor inicial: entero: 0
+, Declaración (Tipo: INT Nombre: Identificador: (k) Valor inicial: suma(entero: 4,entero: 7)
+,  )
+, )
+, Declaración (Tipo: BOOL Nombre: Identificador: (padres)
+, Declaración (Tipo: INT Nombre: Identificador: (hermanos)
+, Asignación: acceso a struct: Identificador: (casa) campo: Identificador: (vacia)
+ = true
+, Asignación: Identificador: (x) = acceso a enum: Identificador: (ajo) índice: Identificador: (pepe)
+
+, array  de tipoINT, Nombre: Identificador: (amigo), Dimensiones del array = 3, 4, Valor inicial = entero: 4)
+, Asignación: Identificador: (amigo)acceso array posición entero: 0 = entero: 5
+, Asignación: Identificador: (amigo)acceso array posición entero: 1 = true
+, Asignación: Identificador: (hermanos) = suma(Identificador: (hijos),Identificador: (hijas))
+, For (Inicialización: Declaración (Tipo: INT Nombre: Identificador: (k) Valor inicial: entero: 5
+ Condición: menorIdentificador: (k),entero: 5) Paso: suma ++ (Identificador: (k)) Cuerpo: Declaración (Tipo: INT Nombre: Identificador: (j) Valor inicial: entero: 3
+, Declaración (Tipo: INT Nombre: Identificador: (hijas) Valor inicial: resta(Identificador: (hijas),entero: 2)
+, Instrucción If( condición If: Identificador: (casa)Instrucciones If: Declaración (Tipo: INT Nombre: Identificador: (otro) Valor inicial: suma(entero: 4,entero: 7)
+, Declaración (Tipo: INT Nombre: Identificador: (j) Valor inicial: entero: 4
+,  )
+, )
+, Declaración (Tipo: INT Nombre: Identificador: (b) Valor inicial: entero: 0
+, Instrucción If( condición If: suma(Identificador: (b),entero: 3)Instrucciones If: Declaración (Tipo: BOOL Nombre: Identificador: (ellas) Valor inicial: true
+, Condición Elif 01: resta(Identificador: (b),entero: 0)Instrucciones Elif 01: Declaración (Tipo: BOOL Nombre: Identificador: (ellos) Valor inicial: true
+, Declaración (Tipo: BOOL Nombre: Identificador: (ellos) Valor inicial: true
+, Instrucciones Else: Declaración (Tipo: BOOL Nombre: Identificador: (ellos) Valor inicial: true
+,  )
+, While( Condicion: mayor( Identificador: (hijos),entero: 0), Cuerpo del while: Asignación: Identificador: (hijos) = resta -- (Identificador: (hijos))
+,  )
+, Print: Identificador: (hijas)
+, Return( Identificador: (a) )
+, ) )
+
+, 
+ )
+ERROR SEMANTICO: fila: 33 columna: 14. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 37 columna: 17. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 43 columna: 10. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 58 columna: 13. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 62 columna: 17. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 76 columna: 14. El identificador ya existe. Tomamos la primera declaración.
+
+ERROR SEMANTICO: fila: 13 columna: 5. Error, el tipo de la instrucción return debe coincidir con el tipo de la función.
+
+ERROR SEMANTICO: fila: 19 columna: 5. El tipo de uno de los argumentos no coincide con el de la función
+
+ERROR SEMANTICO: fila: 48 columna: 7. Error de incompatibilidad es la asignación.
+
+ERROR SEMANTICO: fila: 53 columna: 13. Error de incompatibilidad es la asignación.
+
+ERROR SEMANTICO: fila: 67 columna: 5. La condición del if debe ser una expresión booleana
+
+ERROR SEMANTICO: fila: 72 columna: 12. La condición del elif debe ser una expresión booleana

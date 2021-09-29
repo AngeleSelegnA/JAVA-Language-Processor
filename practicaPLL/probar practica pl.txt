@@ -1,0 +1,12 @@
+cd PRACTICA
+
+java -cp alex/jlex.jar JLex.Main alex/AnalizadorLexicoExp
+
+java -cp cup.jar java_cup.Main -parser ConstructorASTExp -symbols ClaseLexica -nopositions constructorast/ConstructorAST.cup
+
+cp ConstructorASTExp.java constructorast/
+cp ClaseLexica.java constructorast/
+
+javac -cp "cup.jar" alex/*.java constructorast/*.java errors/*.java ast/*.java
+
+java -cp "cup.jar:." constructorast/Main  prueba.txt

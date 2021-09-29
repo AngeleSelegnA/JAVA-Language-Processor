@@ -1,0 +1,42 @@
+Programa( 
+STRUCT( NOMBRE: Identificador: (casa), ELEMENTOS: Declaración (Tipo: BOOL Nombre: Identificador: (vacia)
+, Declaración (Tipo: INT Nombre: Identificador: (numPersonas)
+,  )
+
+ENUM (NOMBRE: Identificador: (hermanos) VALORES: Identificador: (pepe), Identificador: (carla), Identificador: (jaime), 
+, ENUM (NOMBRE: Identificador: (padres) VALORES: Identificador: (pepe), Identificador: (carla), 
+
+
+
+FUNCIÓN (TIPO: BOOL, NOMBRE: Identificador: (casa), PARÁMETROS: (), INSTRUCCIONES: (Declaración (Tipo: INT Nombre: Identificador: (hijos) Valor inicial: entero: 2
+, Declaración (Tipo: INT Nombre: Identificador: (hijas) Valor inicial: entero: 3
+, Declaración (Tipo: INT Nombre: Identificador: (padres)
+, Declaración (Tipo: INT Nombre: Identificador: (hermanos)
+, array  de tipoBOOL, Nombre: Identificador: (casa), Dimensiones del array = 3, 4, Valor inicial = 4)
+, Asignación: Identificador: (hermanos) = suma(Identificador: (hijos),Identificador: (hijas))
+, For (Inicialización: Declaración (Tipo: INT Nombre: Identificador: (i) Valor inicial: entero: 5
+ Condición: menorIdentificador: (i),entero: 5) Paso: suma ++ (Identificador: (i)) Cuerpo: Declaración (Tipo: INT Nombre: Identificador: (hijas) Valor inicial: resta(Identificador: (hijas),entero: 2)
+, Instrucción If( condición If: Identificador: (casa)Instrucciones If: Declaración (Tipo: INT Nombre: Identificador: (k) Valor inicial: suma(entero: 4,entero: 7)
+,  )
+, )
+, Instrucción If( condición If: mayor( Identificador: (hijas),Identificador: (hijos))Instrucciones If: Declaración (Tipo: BOOL Nombre: Identificador: (ellas) Valor inicial: true
+, Condición Elif 01: Comparación Igualdad(Identificador: (hijas),Identificador: (hijos))Instrucciones Elif 01: Declaración (Tipo: BOOL Nombre: Identificador: (ellos) Valor inicial: true
+, Declaración (Tipo: BOOL Nombre: Identificador: (ellas) Valor inicial: true
+, Instrucciones Else: Declaración (Tipo: BOOL Nombre: Identificador: (ellos) Valor inicial: true
+,  )
+, While( Condicion: mayor( Identificador: (hijos),entero: 0), Cuerpo del while: Asignación: Identificador: (hijos) = resta -- (Identificador: (hijos))
+,  )
+, Print: Identificador: (hijas)
+, Return( Identificador: (hijos) )
+, ) )
+
+, 
+PROCEDIMIENTO void (NOMBRE: Identificador: (familia), PARÁMETROS: Parametro( Tipo: INT, nombre: Identificador: (hijos) )
+, Parametro( Tipo: INT, nombre: Identificador: (hijas) )
+, , INSTRUCCIONES: Asignación: Identificador: (hijos) = suma(entero: 5,entero: 4)
+, Asignación: Identificador: (hijas) = resta(entero: 5,multiplicación entero: 3*entero: 4)
+, Asignación: Identificador: (padres) = división suma(Identificador: (hijos),Identificador: (hijas))/entero: 4
+,  )
+
+, 
+ )

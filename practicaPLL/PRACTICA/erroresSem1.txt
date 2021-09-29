@@ -1,0 +1,87 @@
+//Declaracion correcta de struct
+struct casa{
+    bool vacia;
+    int numPersonas;
+};
+
+//Declaración correcta de enum
+enum ajo= {pepe|carla};
+
+//error semántico: el tipo de la expresión return debe tener el tipo de la funcion
+fun int suma(int x){
+    bool ok=true;
+    return ok;
+}
+
+//error en los parametros al llamar a una función
+fun void errorLlamada(){
+    bool otro;
+    call suma(otro);
+}
+
+fun bool casas(bool ale ){
+    int y = 3;
+    int x = call suma(y);
+    print x;
+    int hijos = 2;
+    int hijas = 3;
+    int padres;
+    int i=5;
+    bool a = i < 3;
+
+    //La variable i ya estaba declarada no la podemos volver a declarar
+    for( int i = 5; i < 5; ++i){
+        int j = 3;
+        if(casa){
+            //Ya existia una variable j dentro de este bloque: error semántico
+            int j = 0;
+            int k = 4 + 7;
+        }
+    }
+
+    //ya habia una variable padres declarada, informará de un error
+    bool padres;
+
+
+    int hermanos;
+    casa.vacia = true;
+    x = ajo:pepe;
+    int amigo[3, 4 {4}];
+    amigo[0] = 5;
+
+    //Error de incompatibilidad en la asignación
+    amigo[1]=true;
+
+    hermanos = hijos + hijas;
+    for( int k = 5; k<5; ++k){
+        int j = 3;
+        int hijas = hijas - 2;
+        if(casa){
+            //aqui puedo declarar una variable otro como había en otra función porque está en un ámbito distinto
+            int otro = 4 + 7;
+            int j = 4;
+        }
+    }
+    int b=0;
+    //la condición del if debe ser una expresión booleana no aritmética: error semántico
+    if(b+3){
+        bool ellas = true;
+
+    }
+    //la condicion de un elif debe ser una expresion booleana: error semántico
+    elif (b-0){
+        bool ellos = true;
+
+        //identificador que ya existe
+        bool ellos = true;
+    }
+    else{
+        bool ellos = true;
+    }
+    while(hijos > 0){
+        hijos = --hijos;
+    }
+    print hijas;
+    return a;
+}
+

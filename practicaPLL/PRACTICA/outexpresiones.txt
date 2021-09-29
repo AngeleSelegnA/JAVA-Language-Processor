@@ -1,0 +1,192 @@
+Programa( 
+
+
+PROCEDIMIENTO void (NOMBRE: Identificador: (expOperaciones), PARÁMETROS: , INSTRUCCIONES: Declaración (Tipo: INT Nombre: Identificador: (x) Valor inicial: suma(entero: 5,multiplicación entero: 7*módulo(entero: 3,división entero: 2/entero: 5))
+, Declaración (Tipo: INT Nombre: Identificador: (y) Valor inicial: multiplicación entero: 8*multiplicación entero: 4*entero: 3
+, Declaración (Tipo: FLOAT Nombre: Identificador: (z) Valor inicial: división Identificador: (x)/Identificador: (y)
+,  )
+
+, 
+PROCEDIMIENTO void (NOMBRE: Identificador: (expBooleanas), PARÁMETROS: , INSTRUCCIONES: Declaración (Tipo: INT Nombre: Identificador: (x) Valor inicial: entero: 5
+, Declaración (Tipo: INT Nombre: Identificador: (y) Valor inicial: entero: 8
+, Declaración (Tipo: BOOL Nombre: Identificador: (a) Valor inicial: or(Comparación Igualdad(Identificador: (x),Identificador: (y)),mayor( Identificador: (x),multiplicación entero: 4*Identificador: (y)))
+, Declaración (Tipo: BOOL Nombre: Identificador: (b) Valor inicial: or(Identificador: (a),false)
+, Declaración (Tipo: BOOL Nombre: Identificador: (c) Valor inicial: and(not Identificador: (a),not Identificador: (b))
+, Declaración (Tipo: BOOL Nombre: Identificador: (d) Valor inicial: and(Identificador: (c),true)
+,  )
+
+, 
+ )
+(module
+(type $_sig_i32ri32 (func (param i32) (result i32)))
+(type $_sig_ri32 (func (result i32)))
+(type $_sig_void (func ))
+(import "runtime" "exceptionHandler" (func $exception (type $_sig_i32)))
+(import "runtime" "print" (func $print (type $_sig_i32)))
+(import "runtime" "read" (func $read (type $_sig_ri32)))
+(memory 32)
+(global $SP (mut i32) (i32.const 0)) ;; start of stack
+(global $MP (mut i32) (i32.const 0)) ;; mark pointer
+(global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4
+(func $reserveStack (param $size i32)
+(result i32)
+get_global $MP
+get_global $SP
+set_global $MP
+get_global $SP
+get_local $size
+i32.add
+set_global $SP
+get_global $SP
+get_global $NP
+i32.gt_u
+if
+i32.const 3
+call $exception
+end
+)
+(func $freeStack (type $_sig_void)
+get_global $MP
+i32.load offset=4
+set_global $SP
+get_global $MP
+i32.load
+set_global $MP
+)
+(start $main)
+(func $main
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 5
+i32.const 7
+i32.const 3
+i32.const 2
+i32.const 5
+i32.div_s
+i32.ne
+i32.mul
+i32.add
+i32.store
+i32.const 1
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 8
+i32.const 4
+i32.const 3
+i32.mul
+i32.mul
+i32.store
+i32.const 2
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 1
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.div_s
+i32.store
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 5
+i32.store
+i32.const 1
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 8
+i32.store
+i32.const 2
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 1
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.eq
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 4
+i32.const 1
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.mul
+i32.gt
+i32.or
+i32.store
+i32.const 3
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 2
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+0
+i32.or
+i32.store
+i32.const 4
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 2
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.eqz
+i32.const 3
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.eqz
+i32.and
+i32.store
+i32.const 5
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 4
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+1
+i32.and
+i32.store
+)
+)

@@ -1,0 +1,193 @@
+Programa( 
+STRUCT( NOMBRE: Identificador: (semana), ELEMENTOS: Declaración (Tipo: BOOL Nombre: Identificador: (semanaAjetreada)
+, Declaración (Tipo: INT Nombre: Identificador: (lunes) Valor inicial: entero: 5
+, Declaración (Tipo: INT Nombre: Identificador: (martes) Valor inicial: entero: 4
+, Declaración (Tipo: INT Nombre: Identificador: (miercoles) Valor inicial: entero: 5
+, Declaración (Tipo: INT Nombre: Identificador: (jueves) Valor inicial: entero: 3
+, Declaración (Tipo: INT Nombre: Identificador: (viernes) Valor inicial: entero: 0
+, Declaración (Tipo: INT Nombre: Identificador: (sabado) Valor inicial: entero: 1
+, Declaración (Tipo: INT Nombre: Identificador: (domingo) Valor inicial: entero: 2
+,  )
+
+
+
+FUNCIÓN (TIPO: INT, NOMBRE: Identificador: (calculaNumTareas), PARÁMETROS: (Parametro( Tipo: INT, nombre: Identificador: (dia) )
+, ), INSTRUCCIONES: (Declaración (Tipo: INT Nombre: Identificador: (sol) Valor inicial: entero: 0
+, Instrucción If( condición If: Comparación Igualdad(Identificador: (dia),entero: 1)Instrucciones If: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (lunes)
+
+, Condición Elif 01: Comparación Igualdad(Identificador: (dia),entero: 6)Instrucciones Elif 01: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (sabado)
+
+, Condición Elif 11: Comparación Igualdad(Identificador: (dia),entero: 5)Instrucciones Elif 11: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (viernes)
+
+, Condición Elif 21: Comparación Igualdad(Identificador: (dia),entero: 4)Instrucciones Elif 21: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (jueves)
+
+, Condición Elif 31: Comparación Igualdad(Identificador: (dia),entero: 3)Instrucciones Elif 31: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (miercoles)
+
+, Condición Elif 41: Comparación Igualdad(Identificador: (dia),entero: 2)Instrucciones Elif 41: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (martes)
+
+, Instrucciones Else: Asignación: Identificador: (sol) = acceso a struct: Identificador: (semana) campo: Identificador: (domingo)
+
+,  )
+, Return( Identificador: (sol) )
+, ) )
+
+, 
+PROCEDIMIENTO void (NOMBRE: Identificador: (agenda), PARÁMETROS: , INSTRUCCIONES: array  de tipoINT, Nombre: Identificador: (tareas), Dimensiones del array = 7, Valor inicial = entero: 0)
+, Declaración (Tipo: INT Nombre: Identificador: (suma) Valor inicial: entero: 0
+, Declaración (Tipo: BOOL Nombre: Identificador: (ajetreado)
+, For (Inicialización: Declaración (Tipo: INT Nombre: Identificador: (i) Valor inicial: entero: 1
+ Condición: menor o igual(Identificador: (i),entero: 7) Paso: suma ++ (Identificador: (i)) Cuerpo: Asignación: Identificador: (tareas)acceso array posición Identificador: (i) = call( nombre: Identificador: (calculaNumTareas), argumentos: Identificador: (i),  )
+
+, Asignación: Identificador: (suma) = suma(Identificador: (suma),Identificador: (tareas)acceso array posición Identificador: (i))
+, )
+, Instrucción If( condición If: mayor( Identificador: (suma),entero: 7)Instrucciones If: Asignación: Identificador: (ajetreado) = true
+, Instrucciones Else: Asignación: Identificador: (ajetreado) = false
+,  )
+, Asignación: acceso a struct: Identificador: (semana) campo: Identificador: (semanaAjetreada)
+ = Identificador: (ajetreado)
+, Print: Identificador: (ajetreado)
+,  )
+
+, 
+ )
+(module
+(type $_sig_i32ri32 (func (param i32) (result i32)))
+(type $_sig_ri32 (func (result i32)))
+(type $_sig_void (func ))
+(import "runtime" "exceptionHandler" (func $exception (type $_sig_i32)))
+(import "runtime" "print" (func $print (type $_sig_i32)))
+(import "runtime" "read" (func $read (type $_sig_ri32)))
+(memory 20)
+(global $SP (mut i32) (i32.const 0)) ;; start of stack
+(global $MP (mut i32) (i32.const 0)) ;; mark pointer
+(global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4
+(func $reserveStack (param $size i32)
+(result i32)
+get_global $MP
+get_global $SP
+set_global $MP
+get_global $SP
+get_local $size
+i32.add
+set_global $SP
+get_global $SP
+get_global $NP
+i32.gt_u
+if
+i32.const 3
+call $exception
+end
+)
+(func $freeStack (type $_sig_void)
+get_global $MP
+i32.load offset=4
+set_global $SP
+get_global $MP
+i32.load
+set_global $MP
+)
+(start $main)
+(func $main
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.const 0
+i32.store
+i32.const 1
+i32.eq
+if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+i32.const 6
+i32.eq
+else if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+i32.const 5
+i32.eq
+else if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+i32.const 4
+i32.eq
+else if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+i32.const 3
+i32.eq
+else if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+i32.const 2
+i32.eq
+else if 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+else 
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+i32.add
+i32.const 8
+i32.add
+i32.store
+end
+i32.const 0
+i32.const 4
+i32.mul
+get_local ($localsStart)
+i32.add
+return
+//este error se debe a que no tenemos implementada la generación de código para arrays
+Exception in thread "main" java.lang.NullPointerException
+        at ast.Iden.code(Iden.java:110)
+        at ast.Array.code(Array.java:90)
+        at ast.InsProc.code(InsProc.java:126)
+        at ast.P.code(P.java:101)
+        at constructorast.Main.main(Main.java:27)

@@ -1,0 +1,466 @@
+package constructorast;
+
+import java_cup.runtime.*;
+import alex.AnalizadorLexicoExp;
+import alex.UnidadLexica;
+import errors.GestionErroresExp;
+import java.util.List;
+import java.util.ArrayList;
+
+import ast.*;
+import alex.*;
+
+scan with {: return getScanner().next_token(); :};
+action code {:
+   private AS as = new AS();
+:};
+parser code {: 
+   private GestionErroresExp errores;
+   public void syntax_error(Symbol unidadLexica) {
+     errores.errorSintactico((UnidadLexica)unidadLexica);
+   }
+:};
+init with {: 
+   errores = new GestionErroresExp();
+   AnalizadorLexicoExp alex = (AnalizadorLexicoExp)getScanner();
+   alex.fijaGestionErrores(errores);
+:};
+
+
+terminal Tipo          INT, BOOL, CHAR, FLOAT;
+terminal TokenValue        IDEN;
+terminal TokenValue     CAP, CCIERRE, PAP, PCIERRE, LLAP, LLCIERRE, 
+             COMA, PUNTOCOMA, TRUE, FALSE, BARRA,
+             MAYOR, MENOR, MAYORIGUAL, MENORIGUAL, IF, ELSE, ELIF, MASMAS, MENOSMENOS, SUMA, RESTA, MULTI, DIV, IGUAL,IGUALIGUAL, DISTINTO, AND, OR, NOT, MODULO,
+              WHILE, FOR, STRUCT, ENUM, VOID, RETURN, FUN, CALL,
+             ENTERO, REAL, CARACTER, PRINT, ACCESOSTRUCT, ACCESOENUM;
+
+non terminal  P         P;
+non terminal Ins        Ins, InsP, InsFor, InsWhile, InsIf, InsStruct, InsCallFun, InsEnum, InsAsign, InsDeclarac, InsPrint, InsDeclaracValorIni, InsFun, InsProc, InsReturn, InsDeclaracArray; 
+non terminal List<Ins>  Cuerpo, ListaDec, LIns , LInsP;
+non terminal List<Exp>   LArg, ListaEnum;
+non terminal List<Parametro> LParam;
+non terminal List<Integer> LEntero;
+non terminal LStructEnum LStructEnum;
+non terminal List<Pair<Exp,  List<Ins>>> LElif;
+non  terminal Tipo Tipo ;             
+non terminal Exp   Exp0, Exp1, Exp2, Exp3, Exp4, Exp5, Exp6, Exp7, Exp8;
+
+P       ::= LStructEnum:dec LInsP:cuerpo
+{:RESULT = new P(cuerpo,dec,0,0);:};
+
+LInsP ::= InsP:ins LInsP:lista
+{:lista.add(0, ins);
+RESULT = lista;:};
+LInsP ::= 
+{:RESULT = new ArrayList<Ins>();:};
+
+LStructEnum ::= LStructEnum:dec InsStruct:str
+{:dec.addS(str); RESULT= dec; :} ;
+LStructEnum ::=  LStructEnum:dec InsEnum:en
+{:dec.addE(en); RESULT= dec; :} ;
+LStructEnum ::= 
+{:RESULT = new LStructEnum();:};
+
+InsP ::= InsFun:ins
+{: RESULT = ins;:};
+InsP ::= InsProc:ins
+{: RESULT = ins;:};
+
+Ins     ::=  InsFor:ins
+{: RESULT = ins  ;:};
+Ins     ::=  InsWhile:ins
+{: RESULT = ins  ;:};
+Ins     ::= InsIf:ins
+{: RESULT = ins  ;:};
+Ins     ::=  InsAsign:ins 
+{: RESULT = ins  ;:};
+Ins     ::=  InsDeclarac:ins
+{: RESULT = ins  ;:};
+Ins     ::=  InsReturn:ins
+{: RESULT = ins  ;:};
+Ins     ::=  InsPrint:ins
+{: RESULT = ins  ;:};
+Ins     ::= InsCallFun:ins
+{: RESULT = ins  ;:};
+Ins     ::= InsDeclaracArray:ins
+{: RESULT = ins  ;:};
+
+
+
+LIns ::= Ins:ins LIns:lista
+{: lista.add(0,ins);
+RESULT = lista  ;:};
+LIns ::= 
+{: RESULT = new ArrayList<Ins>();:};
+
+
+
+Cuerpo  ::= LLAP LIns:lista LLCIERRE
+{: RESULT = lista;:};
+
+
+Tipo    ::= BOOL 
+{:RESULT = as.TBool(); :}; 	
+Tipo    ::= INT
+{:RESULT = as.TInt(); :}; 	
+Tipo    ::= CHAR
+{:RESULT = as.TChar(); :}; 	
+Tipo    ::= FLOAT 
+{:RESULT = as.TFloat(); :}; 	
+
+
+InsPrint ::= PRINT:a Exp0:exp PUNTOCOMA
+{:RESULT = as.InsPrint(exp, a.getF(), a.getC()); :}; 	
+
+
+InsDeclarac ::= InsDeclaracValorIni:ins
+{:RESULT = ins; :};
+
+InsDeclarac ::= Tipo: tipo IDEN: id  PUNTOCOMA
+{:RESULT = as.InsDeclarac(tipo, as.Iden(id.getLexema(),id.getF(),id.getC()),id.getF(),id.getC()); :};
+
+
+InsDeclaracValorIni ::= Tipo: tipo IDEN: id IGUAL Exp0:valor PUNTOCOMA
+{:RESULT = as.InsDeclarac(tipo, as.Iden(id.getLexema(),id.getF(),id.getC()), valor,id.getF(),id.getC()); :};
+
+
+InsAsign    ::= Exp0: variable  IGUAL:a Exp0:valor PUNTOCOMA
+{:RESULT=as.InsAsignac(variable, valor, a.getF(), a.getC());:};
+
+
+InsDeclaracArray ::= Tipo:tipo IDEN:id CAP  LEntero:lista CCIERRE PUNTOCOMA
+{: RESULT = as.Array(tipo, as.Iden(id.getLexema(),id.getF(),id.getC()), lista,id.getF(), id.getC()); :}; 	
+InsDeclaracArray ::= Tipo:tipo IDEN:id CAP LEntero:lista  LLAP Exp0:valorIni LLCIERRE CCIERRE PUNTOCOMA
+{: RESULT = as.Array(tipo, as.Iden(id.getLexema(),id.getF(), id.getC()),lista, valorIni,id.getF(), id.getC() ); :}; 
+             
+LEntero     ::= ENTERO:ent COMA LEntero:lista
+{: lista.add(0,Integer.parseInt(ent.getLexema()));
+RESULT =lista;:};
+
+LEntero     ::=  ENTERO: ent
+{: List<Integer> lista = new ArrayList<Integer>();
+lista.add(0, Integer.parseInt(ent.getLexema()));
+ RESULT = lista;:};
+
+
+InsReturn   ::= RETURN:a Exp0:valor PUNTOCOMA
+{:RESULT = as.InsReturn(valor, a.getF(), a.getC());   :};
+
+
+LArg        ::= Exp0:exp COMA LArg:lista
+{: lista.add(0,exp);
+RESULT = lista;:};
+LArg        ::= Exp0:exp
+{:  List<Exp> lista = new ArrayList<Exp>();
+lista.add(0,exp);
+RESULT = lista;:};
+
+
+
+InsCallFun  ::= CALL:a IDEN:id PAP LArg:args PCIERRE PUNTOCOMA
+{:RESULT = as.InsCallFun( as.Iden(id.getLexema(),id.getF(), id.getC()),args, a.getF(), a.getC()); :};
+InsCallFun  ::= CALL:a IDEN:id PAP PCIERRE PUNTOCOMA
+{:RESULT = as.InsCallFun( as.Iden(id.getLexema(),id.getF(),id.getC()), a.getF(), a.getC());   :};
+
+
+
+InsFun      ::= FUN:a Tipo:tipo IDEN: id PAP LParam:listaP PCIERRE Cuerpo:cu
+{:RESULT  = as.InsFun(tipo, as.Iden(id.getLexema(),id.getF(),id.getC()),listaP,cu, a.getF(), a.getC()); :};
+InsFun      ::= FUN:a Tipo:tipo IDEN:id PAP PCIERRE Cuerpo:cu
+{:RESULT = as.InsFun(tipo, as.Iden(id.getLexema(),id.getF(), id.getC()),cu, a.getF(), a.getC());   :};
+
+InsProc     ::= FUN:a VOID IDEN:id PAP LParam:listaP PCIERRE Cuerpo:cu
+{:RESULT = as.InsProc( as.Iden(id.getLexema(),id.getF(), id.getC()), listaP ,cu, a.getF(), a.getC());   :};
+InsProc     ::= FUN:a VOID IDEN:id PAP PCIERRE Cuerpo:cu
+{:RESULT = as.InsProc( as.Iden(id.getLexema(),id.getF(),id.getC()),cu, a.getF(), a.getC());   :};
+
+
+LParam      ::= Tipo:tipoP IDEN:id COMA LParam:lista
+{: lista.add(0,as.Parametro(tipoP, as.Iden(id.getLexema(),id.getF(),id.getC()),id.getF(),id.getC()));
+ RESULT = lista;:};
+
+LParam      ::= Tipo:tipoP IDEN:id
+{: List<Parametro> lista = new ArrayList<Parametro>();
+lista.add(0,as.Parametro(tipoP, as.Iden(id.getLexema(),id.getF(), id.getC()), id.getF(),id.getC()));
+RESULT = lista;:};
+
+
+InsFor    ::= FOR:a PAP InsDeclaracValorIni:ins  Exp0:condicion PUNTOCOMA  Exp0:paso PCIERRE  Cuerpo:cuerpo 
+{:RESULT=as.InsFor(ins, condicion, paso,cuerpo, a.getF(), a.getC());:};
+
+
+
+InsIf   ::=  IF:a PAP Exp0:cond PCIERRE  Cuerpo:cu 
+{:RESULT = as.InsIf( cond,cu, a.getF(), a.getC()) ;   :};
+InsIf   ::= IF:a PAP Exp0:cond PCIERRE Cuerpo:cuif ELSE Cuerpo:cuelse
+{:RESULT = as.InsIf( cond, cuif, cuelse, a.getF(), a.getC() );   :};
+InsIf   ::= IF:a PAP Exp0:cond PCIERRE  Cuerpo:cuif LElif:lista ELSE  Cuerpo:cuelse 
+{:
+ List<Exp> lcondelif = new ArrayList<Exp>();
+List< List<Ins>> lcuelif = new ArrayList< List<Ins>>(); 
+   for(int i = 0; i < lista.size(); ++i){
+      lcondelif.add(0,lista.get(i).getKey());
+      lcuelif.add(0,lista.get(i).getValue()) ; 
+   }
+
+RESULT = as.InsIf( cond, cuif, lcondelif, lcuelif, cuelse,0 , a.getF(), a.getC());   :};
+
+InsIf   ::= IF:a PAP Exp0:cond PCIERRE  Cuerpo:cuif LElif:lista  
+{:
+List<Exp> lcondelif = new ArrayList<Exp>();
+List<List<Ins>> lcuelif = new ArrayList<List<Ins>>(); 
+   for(int i = 0; i < lista.size(); ++i){
+      lcondelif.add(0,lista.get(i).getKey());
+      lcuelif.add(0,lista.get(i).getValue()) ; 
+   }
+RESULT = as.InsIf( cond, cuif, lcondelif, lcuelif, 0 , a.getF(), a.getC());   :};
+
+LElif ::= ELIF PAP Exp0:cond PCIERRE Cuerpo:cu LElif:lista
+{:lista.add(0,new Pair <Exp, List<Ins>> (cond, cu));
+RESULT = lista;:};
+
+LElif ::= ELIF PAP Exp0:cond PCIERRE Cuerpo:cu
+{:List<Pair<Exp,  List<Ins>>> lista = new ArrayList<Pair<Exp, List<Ins>>>();
+lista.add(0,new Pair <Exp, List<Ins>> (cond, cu));
+RESULT = lista;:};
+   
+
+InsWhile  ::= WHILE:a PAP Exp0:condicion PCIERRE Cuerpo:cuerpo
+{:RESULT=as.InsWhile(condicion,cuerpo, a.getF(), a.getC());:};
+
+
+InsStruct ::= STRUCT:a IDEN:id LLAP ListaDec:listaStruct LLCIERRE PUNTOCOMA
+{:RESULT=as.InsStruct(as.Iden(id.getLexema(),id.getF(),id.getC()), listaStruct, a.getF(), a.getC());:};
+
+ListaDec ::= InsDeclarac:ins ListaDec:lista
+{:lista.add(0,ins);
+RESULT=lista;:} ;  
+
+
+ListaDec ::= 
+{:RESULT =  new ArrayList<Ins>(); :};
+
+
+
+InsEnum ::= ENUM:a IDEN:id IGUAL LLAP ListaEnum:listaE LLCIERRE PUNTOCOMA
+{:RESULT = as.InsEnum(as.Iden(id.getLexema(),id.getF(),id.getC()),listaE, a.getF(), a.getC())  ;:};
+
+ListaEnum ::= IDEN:id BARRA ListaEnum:lista
+{:lista.add(0,as.Iden(id.getLexema(),id.getF(),id.getC()));
+ RESULT = lista;:};
+
+ListaEnum ::= IDEN:id
+{: List<Exp> lista = new ArrayList<Exp>();
+lista.add(0,as.Iden(id.getLexema(),id.getF(), id.getC()));
+RESULT = lista;:};
+
+
+Exp0     ::=Exp1:exp1  OR:a Exp0:exp2
+{:RESULT =as.Or(exp1,exp2, a.getF(), a.getC());:};
+Exp0     ::=Exp1:exp
+{:RESULT = exp;:};
+
+Exp1     ::=Exp2:exp1 AND:a Exp1:exp2
+{:RESULT= as.And(exp1,exp2, a.getF(), a.getC());:};
+Exp1     ::=Exp2:exp
+{:RESULT = exp;:};
+
+Exp2     ::=Exp3:exp1 IGUALIGUAL:a Exp2:exp2
+{:RESULT =as.IgualIgual(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp1 MAYOR:a Exp2:exp2
+{:RESULT =as.Mayor(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp1 MENOR:a Exp2:exp2
+{:RESULT =as.Menor(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp1 MAYORIGUAL:a Exp2:exp2
+{:RESULT =as.MayorIgual(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp1 MENORIGUAL:a Exp2:exp2
+{:RESULT =as.MenorIgual(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp1 DISTINTO:a Exp2:exp2
+{:RESULT =as.Distinto(exp1,exp2, a.getF(), a.getC());:};
+Exp2     ::=Exp3:exp
+{:RESULT = exp;:};
+
+Exp3     ::=Exp4:exp1 SUMA:a Exp3:exp2
+{:RESULT =as.Suma(exp1,exp2, a.getF(), a.getC());:};
+Exp3     ::=Exp4:exp1 RESTA:a Exp3:exp2
+{:RESULT =as.Resta(exp1,exp2, a.getF(), a.getC());:};
+Exp3     ::=Exp4:exp
+{:RESULT = exp;:};
+
+
+Exp4     ::=NOT:a Exp4:exp
+{:RESULT =as.Not(exp, a.getF(), a.getC());:};
+Exp4     ::=Exp5:exp
+{:RESULT = exp;:};
+
+Exp5     ::=Exp5:array CAP:a Exp0:ind CCIERRE
+{:RESULT = as.Corchetes(array, ind, a.getF(), a.getC() );:};
+Exp5     ::=Exp5:str ACCESOSTRUCT:a IDEN:id
+{:RESULT = as.AccesoStruct(str,as.Iden(id.getLexema(),id.getF(),id.getC()), a.getF(), a.getC());:};
+Exp5     ::=Exp5:en ACCESOENUM:a IDEN:id
+{:RESULT = as.AccesoEnum(en,as.Iden(id.getLexema(),id.getF(),id.getC()), a.getF(), a.getC());:};
+Exp5     ::=Exp6:exp
+{:RESULT = exp;:};
+
+Exp6     ::= Exp7:exp1 MULTI:a Exp6:exp2
+{:RESULT =as.Multi(exp1,exp2, a.getF(), a.getC());:};
+Exp6     ::= Exp7:exp1 DIV:a Exp6:exp2
+{:RESULT =as.Div(exp1,exp2, a.getF(), a.getC());:};
+Exp6     ::=Exp7:exp1 MODULO:a Exp6:exp2
+{:RESULT =as.Modulo(exp1,exp2, a.getF(), a.getC());:};
+Exp6     ::=Exp7:exp
+{:RESULT = exp;:};
+
+
+Exp7     ::= MASMAS:a Exp8:exp
+{:RESULT = as.MasMas(exp,a.getF(), a.getC());:};
+Exp7     ::= MENOSMENOS:a Exp8:exp
+{:RESULT = as.MenosMenos(exp,a.getF(), a.getC());:};
+Exp7     ::= Exp8:exp
+{:RESULT = exp;:};
+
+Exp8     ::=ENTERO:ent
+{:RESULT = as.NumEntero(ent.getLexema(), ent.getF(), ent.getC());:};
+Exp8     ::=REAL:real
+{:RESULT =  as.NumReal(real.getLexema(), real.getF(), real.getC());:};
+Exp8     ::=CARACTER:car
+{:RESULT = as.Caracter(car.getLexema(),car.getF(), car.getC());:};
+Exp8     ::=TRUE:a
+{:RESULT =  as.True(a.getF(), a.getC());:};
+Exp8     ::=FALSE:a
+{:RESULT =  as.False(a.getF(), a.getC());:};
+Exp8     ::=PAP Exp0:valorExp PCIERRE
+{:RESULT =  valorExp;:};
+Exp8     ::= CALL IDEN:id PAP LArg:largs PCIERRE
+{:RESULT =  as.CallFun(as.Iden(id.getLexema(),id.getF(), id.getC()), largs, id.getF(), id.getC());:};
+Exp8     ::= CALL IDEN:id PAP PCIERRE
+{:RESULT = as.CallFun( as.Iden(id.getLexema(),id.getF(),id.getC()), id.getF(), id.getC());   :};
+Exp8     ::= IDEN:id 
+{:RESULT =  as.Iden(id.getLexema(),id.getF(), id.getC()) ;:};
+
+
+
+
+
+InsIf ::= IF PAP error LLCIERRE
+ {: System.out.println("Error en la condición del if\n"); 
+RESULT = null; :};
+InsIf ::= IF PAP Exp0 PCIERRE LLAP error LLCIERRE
+{: System.err.println("Error en el cuerpo del if\n"); 
+RESULT = null; :};
+
+InsWhile ::= WHILE PAP error LLCIERRE
+{: System.err.println("Error en la condición del while\n"); 
+RESULT = null; :};
+InsWhile ::= WHILE PAP Exp0 PCIERRE LLAP error LLCIERRE
+{: System.err.println("Error en el cuerpo del while\n"); 
+RESULT = null; :};
+
+InsFor ::= FOR PAP error LLCIERRE
+{: System.err.println("Error en la declaración/asignacion de la variable del for \n"); 
+RESULT = null; :};
+InsFor ::= FOR PAP InsDeclaracValorIni error LLCIERRE
+{: System.err.println("Error en la condición del for \n"); 
+RESULT = null; :};
+InsFor ::= FOR PAP InsDeclaracValorIni PUNTOCOMA error LLCIERRE
+{: System.err.println("Error en el paso del for \n"); 
+RESULT = null; :};
+InsFor    ::= FOR PAP InsDeclaracValorIni  Exp0 PUNTOCOMA Exp0 PCIERRE LLAP  error LLCIERRE
+{: System.err.println("Error en el cuerpo del for \n"); 
+RESULT = null; :};
+
+
+InsProc     ::= FUN VOID error PAP  PCIERRE Cuerpo
+{:System.err.println("Error en el identificador del procedimiento \n"); 
+RESULT = null;  :};
+InsProc     ::= FUN VOID IDEN PAP error  PCIERRE Cuerpo
+{:System.err.println("Error en los parámetros de la función \n"); 
+RESULT = null;  :};
+InsProc     ::= FUN VOID IDEN PAP LParam PCIERRE error
+{:System.err.println("Error en el cuerpo de la función \n"); 
+RESULT = null;  :};
+InsProc     ::= FUN VOID IDEN PAP PCIERRE LLAP error
+{:System.err.println("Error en el cuerpo de la función \n"); 
+RESULT = null;  :};
+
+
+InsFun      ::= FUN Tipo error PAP PCIERRE Cuerpo
+{:System.err.println("Error en el identificador de la función \n"); 
+RESULT = null;  :};
+InsFun      ::= FUN Tipo IDEN PAP error PCIERRE Cuerpo
+{:System.err.println("Error en los parámetros de la función \n"); 
+RESULT = null;  :};
+InsFun      ::= FUN Tipo IDEN PAP PCIERRE error
+{:System.err.println("Error en el cuerpo de la función \n"); 
+RESULT = null;  :};
+InsFun      ::= FUN Tipo IDEN PAP LParam PCIERRE error
+{:System.err.println("Error en el cuerpo de la función \n");  
+RESULT = null; :};
+
+
+InsCallFun  ::= CALL error PUNTOCOMA
+{:System.err.println("Error en el identificador de la función al llamar \n"); 
+RESULT = null;  :};
+InsCallFun  ::= CALL IDEN PAP error PCIERRE PUNTOCOMA
+{:System.err.println("Error en los parámetros de la función al llamar\n");
+RESULT = null;   :};
+
+InsReturn   ::= RETURN error PUNTOCOMA
+{:System.err.println("Error en la expresión del print \n");  
+RESULT = null; :};
+
+
+InsEnum ::= ENUM error IGUAL LLAP ListaEnum LLCIERRE PUNTOCOMA
+{:System.err.println("Error en el identificador del enum \n");  
+RESULT = null; :};
+InsEnum ::= ENUM IDEN IGUAL LLAP error LLCIERRE PUNTOCOMA
+{:System.err.println("Error en alguno de los valores del enum \n"); 
+RESULT = null;  :};
+
+
+InsStruct ::= STRUCT error LLAP ListaDec LLCIERRE PUNTOCOMA
+{:System.err.println("Error en el identificador del struct \n");  
+RESULT = null; :};
+InsStruct ::= STRUCT IDEN LLAP error LLCIERRE PUNTOCOMA
+{:System.err.println("Error en alguno de los campos del struct \n");
+RESULT = null;   :};
+
+
+
+InsDeclarac ::= Tipo error  PUNTOCOMA
+{:System.err.println("Error en el identificador de la declaración \n"); 
+RESULT = null;  :};
+
+
+InsDeclaracValorIni ::= Tipo error IGUAL Exp0 PUNTOCOMA
+{:System.err.println("Error en el identificador de la declaración \n"); 
+RESULT = null;  :};
+InsDeclaracValorIni ::= Tipo IDEN IGUAL error PUNTOCOMA
+{:System.err.println("Error en el valor de la declaración con valor inicial \n"); 
+RESULT = null;  :};
+
+
+InsAsign    ::= error PUNTOCOMA
+{:System.err.println("Error en la asignación \n"); 
+RESULT = null;  :};
+
+
+InsDeclaracArray ::= Tipo error CAP  LEntero CCIERRE PUNTOCOMA
+{:System.err.println("Error en el identificador del array \n"); 
+RESULT = null;  :};
+InsDeclaracArray ::= Tipo error CAP LEntero  LLAP ENTERO LLCIERRE CCIERRE PUNTOCOMA
+{:System.err.println("Error en el identificador del array \n");  
+RESULT = null; :};
+InsDeclaracArray ::= Tipo IDEN CAP  error CCIERRE PUNTOCOMA
+{:System.err.println("Error en las dimensiones del array \n"); 
+RESULT = null;  :};
+InsDeclaracArray ::= Tipo IDEN CAP error  LLAP ENTERO LLCIERRE CCIERRE PUNTOCOMA
+{:System.err.println("Error en las dimensiones del array \n");  
+RESULT = null; :};
+InsDeclaracArray ::= Tipo IDEN CAP LEntero  LLCIERRE CCIERRE PUNTOCOMA
+{:System.err.println("Error en el valor inicial del array \n");  
+RESULT = null; :};
+          
+
+    

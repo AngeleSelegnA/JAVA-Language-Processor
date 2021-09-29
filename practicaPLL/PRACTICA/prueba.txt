@@ -1,0 +1,11 @@
+struct casa{
+    bool vacia;
+    int numPersonas;
+};
+enum ajo= {pepe|carla};
+
+fun int suma(int x){
+    int a=1;
+    a ++;
+    return 3+2;
+}

@@ -1,0 +1,180 @@
+package alex;
+
+import errors.GestionErroresExp;
+
+%%
+%cup
+%line
+%class AnalizadorLexicoExp
+%unicode
+%public
+%char
+
+%{
+  private ALexOperations ops;
+  private int charline = 0;
+  private GestionErroresExp errores;
+  public String lexema() {return yytext();}
+  public int fila() {return yyline+1;}
+  public int columna() {return yychar+1-charline;}
+  private void refrescaColumna() {
+    charline = yychar + yytext().length();
+  }
+ 
+  public void fijaGestionErrores(GestionErroresExp errores) {
+   this.errores = errores;
+  }
+%}
+
+%eofval{
+  return ops.unidadEof();
+%eofval}
+
+%init{
+  ops = new ALexOperations(this);
+%init}
+
+letra  = ([A-Z]|[a-z])
+newline = [\r\n]
+separador = [ \t\b]
+digitoPositivo = [1-9]
+digito = ({digitoPositivo}|0)
+parteEntera = {digitoPositivo}{digito}*
+parteDecimal = {digito}* {digitoPositivo}
+comentarioLinea = \/\/[^\n]* 
+comentarioVariasLineas =  \/\/[^\n]* 
+comentario = ({comentarioLinea}|{comentarioVariasLineas})
+numeroEntero = ({parteEntera}|0)
+numeroReal = ({parteEntera}|0)\.{parteDecimal}
+caracter = \'{letra}\'
+
+operadorSuma = \+
+operadorResta = \-
+operadorMultiplicacion = \*
+operadorDivision = \/
+operadorModulo = \%
+operadorAnd = \&\&
+operadorOr = \|\|
+operadorNot = \!
+operadorMenor = \<
+operadorMayor = \>
+operadorMenorIgual = \<\=
+operadorMayorIgual = \>\=
+operadorIgualIgual = \=\=
+operadorIgual = \=
+operadorDistinto = \!\=
+operadorMasMas =\+\+
+operadorMenosMenos = \-\-
+
+
+corcheteApertura = \[
+corcheteCierre = \]
+llavesApertura = \{
+llavesCierre = \}
+parentesisApertura = \(
+parentesisCierre = \)
+
+coma  = \,
+puntoComa = \;
+dosPuntos = \:
+punto = \.
+barrabaja = \_
+barra = \|
+
+
+
+print = print
+int = int
+bool = bool
+char = char
+float = float
+
+true = true
+false = false
+struct = struct
+fun = fun
+if = if
+elif = elif
+else = else
+void = void
+call = call
+while = while
+for = for
+enum = enum
+return = return
+
+identificador = {letra}({letra}|{digito}|{barrabaja})*
+
+
+
+
+%%
+{separador}                 {}
+{newline}                 {refrescaColumna();}
+{comentario}              {refrescaColumna();}
+
+
+{int}                       {return ops.unidadInt();}
+{float}                     {return ops.unidadFloat();}
+{bool}                      {return ops.unidadBool();}
+{char}                      {return ops.unidadChar();}
+{print}                     {return ops.unidadPrint();}
+
+
+{true}                      {return ops.unidadTrue();} 
+{false}                     {return ops.unidadFalse();} 
+{numeroEntero}             {return ops.unidadEntero();}
+{numeroReal}               {return ops.unidadReal();}
+{caracter}                 {return ops.unidadCaracter();}
+
+
+{operadorSuma}              {return ops.unidadSuma();}
+{operadorResta}             {return ops.unidadResta();}
+{operadorMultiplicacion}    {return ops.unidadMul();}
+{operadorDivision}          {return ops.unidadDiv();}
+{operadorModulo}            {return ops.unidadMod();}
+{operadorAnd}               {return ops.unidadAnd();}
+{operadorOr}                {return ops.unidadOr();}
+{operadorNot}               {return ops.unidadNot();}
+{operadorMenor}             {return ops.unidadMenor();}
+{operadorMayor}             {return ops.unidadMayor();}
+{operadorMenorIgual}        {return ops.unidadMenorIgual();}
+{operadorMayorIgual}        {return ops.unidadMayorIgual();}
+{operadorIgualIgual}        {return ops.unidadIgualIgual();}
+{operadorIgual}             {return ops.unidadIgual();}
+{operadorDistinto}          {return ops.unidadDistinto();}
+{operadorMasMas}            {return ops.unidadMasMas();}
+{operadorMenosMenos}        {return ops.unidadMenosMenos();}
+
+
+
+{corcheteApertura}          {return ops.unidadCAp();}
+{corcheteCierre}            {return ops.unidadCCierre();} 
+{parentesisApertura}        {return ops.unidadPAp();}
+{parentesisCierre}          {return ops.unidadPCierre();} 
+{llavesApertura}            {return ops.unidadLLAp();}
+{llavesCierre}              {return ops.unidadLLCierre();} 
+
+{struct}                    {return ops.unidadStruct();} 
+{fun}                       {return ops.unidadFun();} 
+{if}                        {return ops.unidadIf();}
+{elif}                      {return ops.unidadElif();}
+{else}                      {return ops.unidadElse();}
+{void}                      {return ops.unidadVoid();}
+{call}                      {return ops.unidadCall();}
+{while}                     {return ops.unidadWhile();}
+{for}                       {return ops.unidadFor();}
+{enum}                      {return ops.unidadEnum();}
+{return}                    {return ops.unidadReturn();}
+
+
+{coma}                      {return ops.unidadComa();}
+{puntoComa}                 {return ops.unidadPuntoComa();}
+{punto}                     {return ops.unidadPunto();}
+{dosPuntos}                  {return ops.unidadDosPuntos();}  
+{barra}                     {return ops.unidadBarra();}
+
+{identificador}             {return ops.unidadId();}
+
+
+[^]                       {ops.error();}

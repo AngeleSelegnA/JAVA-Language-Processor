@@ -1,0 +1,7 @@
+ERROR SINTÁCTCO: fila 2 columna 25. Error en alguno de los valores del enum 
+
+ERROR SINTÁCTCO: fila 5 columna 10. Error en el identificador del procedimiento 
+
+ERROR SINTÁCTCO: fila 10 columna 21. Error en los parámetros de la función 
+
+ERROR SINTÁCTCO: fila 15 columna 10. Error en el identificador de la función al llamar 

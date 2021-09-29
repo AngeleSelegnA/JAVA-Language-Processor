@@ -1,0 +1,11 @@
+fun void main(){
+    int a=4;
+    int b=3;
+    int sol;
+    if(a<0){
+        sol=a*2;
+    }
+    else{
+        sol=b-3;
+    }
+}
